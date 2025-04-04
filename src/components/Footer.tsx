@@ -70,6 +70,7 @@ export default function Footer() {
               // TODO: Connect to newsletter service (e.g. Mailchimp, ConvertKit)
             }}
             className="mt-7 flex flex-col items-center gap-3 lg:flex-row lg:justify-start"
+            id="newsletter-form"
           >
             <Input
               type="email"

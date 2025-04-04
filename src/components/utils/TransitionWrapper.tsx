@@ -36,7 +36,6 @@ export default function TransitionWrapper({
           //   filter: "blur(10px)",
           //   scale: 0.98,
           // }}
-          className="overflow-hidden"
         >
           {children}
         </motion.div>

@@ -4,10 +4,45 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import ContactInfoItem from "@/components/utils/ContactInfoItem";
 import { HotelaatBtn } from "@/components/utils/HotelaatBtn";
-import { Mail, MapPin } from "lucide-react";
+import { Loader2, Mail, MapPin } from "lucide-react";
 import Image from "next/image";
+import { useState } from "react";
+import { toast } from "sonner";
 
 export default function ContactPage() {
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true);
+
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+
+    const payload = {
+      firstName: formData.get("firstName"),
+      lastName: formData.get("lastName"),
+      email: formData.get("email"),
+      message: formData.get("message"),
+      honey: formData.get("company"),
+    };
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        body: JSON.stringify(payload),
+      });
+      if (!res.ok) throw new Error("Failed to send message");
+
+      toast.success("Message sent successfully!");
+      form.reset();
+    } catch (err) {
+      toast.error("Failed to send message. Please try again later.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <main className="py-32">
       <section className="mx-auto grid min-h-150 max-w-[1440px] grid-cols-1 items-center gap-8 px-4 pt-32 text-center lg:grid-cols-2 lg:text-left">
@@ -18,11 +53,9 @@ export default function ContactPage() {
           </h1>
           <div>
             <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                // TODO: integrate with form service (e.g. Formspree, Resend, etc.)
-              }}
+              onSubmit={handleSubmit}
               className="flex w-full flex-col gap-4 space-y-4 md:gap-3 lg:w-[488px]"
+              id="contact-form"
             >
               {/* Name Fields */}
               <div className="m-0 flex flex-col gap-4 md:flex-row md:gap-3">
@@ -72,12 +105,22 @@ export default function ContactPage() {
                 <Input
                   id="email"
                   name="email"
-                  type="text"
+                  type="email"
                   placeholder="you@company.com"
                   className="focus-visible:ring-h-purple-300 min-h-6 w-full border-gray-200 px-5 py-4 text-sm shadow-sm placeholder:text-gray-400 lg:text-base"
                   required
                 />
               </div>
+
+              {/* Hidden anti-spam honeypot */}
+              <Input
+                id="company"
+                name="company"
+                type="text"
+                placeholder="Company Name"
+                tabIndex={-1}
+                className="focus-visible:ring-h-purple-300 hidden min-h-6 w-full border-gray-200 px-5 py-4 text-sm shadow-sm placeholder:text-gray-400 lg:text-base"
+              />
 
               {/* Message Field */}
               <div className="m-0 w-full">
@@ -102,7 +145,13 @@ export default function ContactPage() {
                 variant="fill"
                 className="shadow-[rgba(99, 51, 166, 0.14)] mt-5 cursor-pointer shadow-lg"
               >
-                Send
+                {loading ? "Sending..." : "Send"}
+                {loading && (
+                  <Loader2
+                    className="ml-2 h-4 w-4 animate-spin text-white"
+                    size={16}
+                  />
+                )}
               </HotelaatBtn>
             </form>
           </div>

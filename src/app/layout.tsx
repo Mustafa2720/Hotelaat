@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import "@/styles/globals.css";
 import { Poppins } from "next/font/google";
 import { twMerge } from "tailwind-merge";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
 import TransitionWrapper from "@/components/utils/TransitionWrapper";
+import LayoutWrapper from "@/components/LayoutWrapper";
+import { Toaster } from "@/components/ui/sonner";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -15,7 +15,7 @@ const poppins = Poppins({
 
 export const metadata: Metadata = {
   title: "Hotelaat",
-  description: "Travel Solutions For Tour Operators",
+  description: "Next Stay, Right Away",
 };
 
 export default function RootLayout({
@@ -34,9 +34,10 @@ export default function RootLayout({
           "overflow-x-hidden",
         )}
       >
-        <Header />
-        <TransitionWrapper>{children}</TransitionWrapper>
-        <Footer />
+        <LayoutWrapper>
+          <TransitionWrapper>{children}</TransitionWrapper>
+        </LayoutWrapper>
+        <Toaster richColors />
       </body>
     </html>
   );

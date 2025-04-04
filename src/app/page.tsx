@@ -4,15 +4,16 @@ import { HotelaatBtn } from "@/components/utils/HotelaatBtn";
 import IconBox from "@/components/utils/IconBox";
 import Image from "next/image";
 import StatsSection from "@/components/Stats";
+import RotatingText from "@/components/RotatingText";
 
 export default function HomePage() {
   return (
     <main>
       <Hero
         title=<>
-          Travel Solutions <br />
+          Travel Solutions For <br />
         </>
-        accentTitle="For Tour Operators"
+        accentTitle={<RotatingText />}
         description=<>
           Leveraging Deep industry expertise to drive <br /> seamless bookings
           and business growth.
